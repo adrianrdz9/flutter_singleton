@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:state_management/models/user.dart';
+import 'package:state_management/services/user_service.dart';
 
 class OnePage extends StatelessWidget {
   @override
@@ -7,7 +9,14 @@ class OnePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Page 1'),
       ),
-      body: UserInformation(),
+      body: StreamBuilder(
+        stream: userService.userStream ,  
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot){
+          return snapshot.hasData
+            ? UserInformation(snapshot.data) 
+            : Center(child: Text("No user exists"));
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.ac_unit),
         onPressed: () => Navigator.pushNamed(context, 'page2'),
@@ -17,6 +26,12 @@ class OnePage extends StatelessWidget {
 }
 
 class UserInformation extends StatelessWidget {
+
+  final User user;
+
+  UserInformation(this.user);
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,10 +46,10 @@ class UserInformation extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            title: Text('Name: '),
+            title: Text('Name: ${this.user.name}'),
           ),
           ListTile(
-            title: Text('Age: '),
+            title: Text('Age: ${this.user.age}'),
           ),
 
           Text(

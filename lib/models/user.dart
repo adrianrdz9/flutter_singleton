@@ -7,5 +7,5 @@ class User {
     this.name,
     this.age,
     this.professions
-  })
+  });
 }
